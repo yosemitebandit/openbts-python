@@ -39,3 +39,7 @@ these examples come from Ch10 of the OpenBTS 4.0 manual
 ### resources
 * see the [OpenBTS 4.0 manual](http://openbts.org/site/wp-content/uploads/2014/07/OpenBTS-4.0-Manual.pdf)
 * and the [NodeManager source](https://github.com/RangeNetworks/NodeManager) from Range
+
+
+### license
+MIT
