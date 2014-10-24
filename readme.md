@@ -43,3 +43,7 @@ these examples come from Ch10 of the OpenBTS 4.0 manual
 
 ### license
 MIT
+
+
+### releases
+* 0.0.1 - barebones setup for pypi
