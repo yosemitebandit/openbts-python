@@ -47,3 +47,24 @@ MIT
 
 ### releases
 * 0.0.1 - barebones setup for pypi
+
+
+### release process
+you need a ~/.pypirc like this:
+
+    # this tells distutils what package indexes you can push to
+    [distutils]
+    index-servers =
+      pypi
+
+    # authentication details for live PyPI
+    [pypi]
+    repository: https://pypi.python.org/pypi
+    username: yosemitebandit
+    password: mhm
+
+then run:
+
+    $ git tag 0.0.1 -m 'openbts-python v0.0.1'
+    $ git push origin master --tags
+    $ python setup.py sdist upload -r pypi
