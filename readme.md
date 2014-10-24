@@ -57,7 +57,7 @@ MIT
 ### release process
 you need a ~/.pypirc like this:
 
-```ini
+```
 [distutils]
 index-servers =
   pypi
