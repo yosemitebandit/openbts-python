@@ -52,12 +52,10 @@ MIT
 ### release process
 you need a ~/.pypirc like this:
 
-    # this tells distutils what package indexes you can push to
     [distutils]
     index-servers =
       pypi
 
-    # authentication details for live PyPI
     [pypi]
     repository: https://pypi.python.org/pypi
     username: yosemitebandit
