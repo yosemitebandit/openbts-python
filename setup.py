@@ -16,7 +16,7 @@ setup(
     version='0.0.1',
     description='OpenBTS NodeManager client',
     long_description=readme,
-    url='http://github.com/endaga/openbts-python',
+    url='http://github.com/yosemitebandit/openbts-python',
     author='Matt Ball',
     author_email='matt.ball.2@gmail.com',
     license='MIT',
