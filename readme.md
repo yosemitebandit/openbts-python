@@ -3,32 +3,32 @@ providing access to OpenBTS, SMQueue, SIPAuthServe and NodeManager itself
 
 
 ### installation
-$ pip install openbts
+    $ pip install openbts
 
 
 ### usage
 these examples come from Ch10 of the OpenBTS 4.0 manual
 
-  # read a config value from a running openbts instance
-  import openbts
-  openbts_connection = openbts.OpenBTS()
-  response = openbts_connection.read_config('GSM.Radio.Band')
-  print response.value
-  # 900
+    # read a config value from a running openbts instance
+    import openbts
+    openbts_connection = openbts.OpenBTS()
+    response = openbts_connection.read_config('GSM.Radio.Band')
+    print response.value
+    # 900
 
-  # set an SMQueue parameter
-  import openbts
-  smqueue_connection = openbts.SMQueue()
-  response = smqueue_connection.update_config('SIP.myIP2', '192.168.0.22')
-  print response.status
-  # ok
+    # set an SMQueue parameter
+    import openbts
+    smqueue_connection = openbts.SMQueue()
+    response = smqueue_connection.update_config('SIP.myIP2', '192.168.0.22')
+    print response.status
+    # ok
 
-  # create a new subscriber
-  import openbts
-  sipauthserve_connection = openbts.SIPAuthServe()
-  response = sipauthserve_connection.create_subscriber()
-  print response.status_code
-  # 204
+    # create a new subscriber
+    import openbts
+    sipauthserve_connection = openbts.SIPAuthServe()
+    response = sipauthserve_connection.create_subscriber()
+    print response.status_code
+    # 204
 
 
 ### requirements
