@@ -10,7 +10,8 @@ $ pip install openbts
 
 
 ### usage
-these examples come from Ch10 of the OpenBTS 4.0 manual
+these examples come from chapter 10 of the
+[OpenBTS 4.0 manual](http://openbts.org/site/wp-content/uploads/2014/07/OpenBTS-4.0-Manual.pdf)
 
 ```python
 # read a config value from a running openbts instance
