@@ -14,7 +14,7 @@ these examples come from chapter 10 of the
 [OpenBTS 4.0 manual](http://openbts.org/site/wp-content/uploads/2014/07/OpenBTS-4.0-Manual.pdf)
 
 ```python
-# read a config value from a running openbts instance
+# read a config value from a running OpenBTS instance
 import openbts
 openbts_connection = openbts.OpenBTS()
 response = openbts_connection.read_config('GSM.Radio.Band')
@@ -31,7 +31,7 @@ print response.status
 # create a new subscriber
 import openbts
 sipauthserve_connection = openbts.SIPAuthServe()
-response = sipauthserve_connection.create_subscriber()
+response = sipauthserve_connection.create_subscriber(name='matt', imsi='899', ki='+Z3m')
 print response.status_code
 # 204
 ```
