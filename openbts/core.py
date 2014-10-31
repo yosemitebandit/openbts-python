@@ -6,7 +6,7 @@ import json
 
 import zmq
 
-from openbts.exceptions import InvalidResponseError
+from openbts.exceptions import InvalidRequestError, InvalidResponseError
 
 class BaseComponent(object):
   """Manages a zeromq connection.
@@ -75,6 +75,12 @@ class BaseComponent(object):
 class Response(object):
   """Provides access to the response data.
 
+  Raises an exception if the request was not successful (e.g. key not found).
+
+  Note that we are explicitly ignoring NodeManager error code 501 (unknown
+  action).  We are tightly controlling the specified action, so we do not
+  expect to encounter this error.
+
   Args:
     raw_response_data: json-encoded text
 
@@ -86,7 +92,7 @@ class Response(object):
   """
 
   success_codes = [200, 204]
-  error_codes = [404, 406, 409, 500, 501]
+  error_codes = [404, 406, 409, 500]
 
   def __init__(self, raw_response_data):
     """Init the response with raw data from the socket."""
@@ -104,8 +110,10 @@ class Response(object):
     # if request failed for some reason, continue
 
     elif data['code'] in self.error_codes:
-      # TODO(matt): raise an exception
-      pass
+      if data['code'] == 404:
+        raise InvalidRequestError('unknown key')
+      if data['code'] == 406:
+        raise InvalidRequestError('invalid value')
 
     # unknown response code
     else:

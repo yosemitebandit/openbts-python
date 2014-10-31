@@ -7,6 +7,7 @@ import mock
 import unittest
 
 from openbts.components import OpenBTS
+from openbts.exceptions import InvalidRequestError
 
 
 class OpenBTSNominalConfigTestCase(unittest.TestCase):
@@ -63,3 +64,31 @@ class OpenBTSNominalConfigTestCase(unittest.TestCase):
                                                      'sample-value')
     self.assertTrue(self.openbts_connection.socket.recv.called)
     self.assertEqual(response.code, 204)
+
+
+class OpenBTSOffNominalConfigTestCase(unittest.TestCase):
+  """Testing the openbts_component.OpenBTS class.
+
+  Examining off-nominal behaviors of the 'config' command and 'openbts' target.
+  """
+
+  def setUp(self):
+    self.openbts_connection = OpenBTS()
+    # mock a zmq socket with a simple recv return value
+    self.openbts_connection.socket = mock.Mock()
+
+  def test_read_config_unknown_key(self):
+    """Reading a nonexistent key raises an error."""
+    self.openbts_connection.socket.recv.return_value = json.dumps({
+      'code': 404,
+    })
+    with self.assertRaises(InvalidRequestError):
+      self.openbts_connection.read_config('nonexistent-key')
+
+  def test_update_config_invalid_value(self):
+    """Updating a value outside the allowed range raises an error."""
+    self.openbts_connection.socket.recv.return_value = json.dumps({
+      'code': 406,
+    })
+    with self.assertRaises(InvalidRequestError):
+      self.openbts_connection.update_config('sample-key', 'sample-value')
