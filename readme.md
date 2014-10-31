@@ -55,6 +55,14 @@ MIT
 * 0.0.1 - barebones setup for pypi
 
 
+### testing
+test with `nose`:
+
+```shell
+$ nosetests --detailed-errors openbts/tests.py
+```
+
+
 ### release process
 you need a ~/.pypirc like this:
 
