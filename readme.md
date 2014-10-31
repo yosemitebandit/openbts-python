@@ -68,7 +68,7 @@ username: yosemitebandit
 password: mhm
 ```
 
-then run:
+bump the versions in `setup.py` and in this file, then run:
 
 ```shell
 $ git tag 0.0.1 -m 'openbts-python v0.0.1'
