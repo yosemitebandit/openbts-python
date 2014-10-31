@@ -12,7 +12,7 @@ from openbts.components import OpenBTS
 class OpenBTSNominalConfigTestCase(unittest.TestCase):
   """Testing the openbts_component.OpenBTS class.
 
-  Testing nominal uses of the 'config' command and 'openbts' target.
+  Applying nominal uses of the 'config' command and 'openbts' target.
   """
 
   def setUp(self):
