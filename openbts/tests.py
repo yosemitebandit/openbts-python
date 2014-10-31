@@ -43,3 +43,23 @@ class OpenBTSNominalConfigTestCase(unittest.TestCase):
     response = self.openbts_connection.read_config('sample-key')
     self.assertTrue(self.openbts_connection.socket.recv.called)
     self.assertEqual(response.code, 204)
+
+  def test_update_config_sends_message(self):
+    """Updating a key should send a JSON-formatted message over zmq."""
+    self.openbts_connection.update_config('sample-key', 'sample-value')
+    self.assertTrue(self.openbts_connection.socket.send.called)
+    expected_message = json.dumps({
+      'command': 'config',
+      'action': 'read',
+      'key': 'sample-key',
+      'value': 'sample-value'
+    })
+    self.assertEqual(self.openbts_connection.socket.send.call_args[0],
+                     (expected_message,))
+
+  def test_update_config_gets_response(self):
+    """Updating a key should use the zmq socket and return a Response."""
+    response = self.openbts_connection.update_config('sample-key',
+                                                     'sample-value')
+    self.assertTrue(self.openbts_connection.socket.recv.called)
+    self.assertEqual(response.code, 204)

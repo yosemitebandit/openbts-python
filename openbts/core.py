@@ -38,6 +38,24 @@ class BaseComponent(object):
     }
     return self._send_and_receive(message)
 
+  def update_config(self, key, value):
+    """Updates a config value.
+
+    Args:
+      key: the config parameter to update
+      value: set the config parameter to this value
+
+    Returns:
+      Response instance
+    """
+    message = {
+      'command': 'config',
+      'action': 'read',
+      'key': key,
+      'value': value
+    }
+    return self._send_and_receive(message)
+
   def _send_and_receive(self, message):
     """sending payloads to NM and returning Response instances.
 
