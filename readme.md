@@ -21,7 +21,7 @@ response = openbts_connection.read_config('GSM.Radio.Band')
 print response.data['value']
 # 900
 
-# update a config value in a running OpenBTS instance
+# update a config value
 response = openbts_connection.update_config('GSM.Identity.MCC', 672)
 print response.code
 # 204
