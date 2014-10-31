@@ -29,9 +29,6 @@ class BaseComponent(object):
 
     Returns:
       Response instance
-
-    Raises:
-      UnknownKeyError
     """
     message = {
       'command': 'config',
