@@ -30,7 +30,7 @@ print response.code
 
 
 ### requirements
-* OpenBTS 4.0
+* OpenBTS (tested on master `11465a2`)
 * Python 2.7
 
 
