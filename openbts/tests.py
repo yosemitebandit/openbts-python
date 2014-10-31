@@ -1,36 +1,45 @@
 """openbts.tests
-tests for the primary modules
+tests for the package's primary modules
 """
+
+import json
+import mock
 import unittest
 
-import openbts
+from openbts.openbts_component import OpenBTS
 
-class CoreTest(unittest.TestCase):
-  """Testing the openbts.core classes.
+
+class OpenBTSNominalConfigTestCase(unittest.TestCase):
+  """Testing the openbts_component.OpenBTS class.
+
+  Testing nominal uses of the 'config' command and 'openbts' target.
   """
+
   def setUp(self):
-    pass
+    self.openbts_connection = OpenBTS()
+    # mock a zmq socket with a simple recv return value
+    self.openbts_connection.socket = mock.Mock()
+    self.openbts_connection.socket.recv.return_value = json.dumps({
+      'code': 204,
+      'data': 'sample',
+      'dirty': 0
+    })
 
+  def test_read_config_sends_message(self):
+    """Reading a key should send a JSON-formatted message over zmq."""
+    self.openbts_connection.read_config('sample-key')
+    self.assertTrue(self.openbts_connection.socket.send.called)
+    expected_message = json.dumps({
+      'command': 'config',
+      'action': 'read',
+      'key': 'sample-key',
+      'value': ''
+    })
+    self.assertEqual(self.openbts_connection.socket.send.call_args[0],
+                     (expected_message,))
 
-class NodeManagerTest(unittest.TestCase):
-  """Testing the openbts.NodeManager class.
-  """
-  def setUp(self):
-    self.node_manager_connection = openbts.NodeManager()
-
-  def test_node_manager_class_is_subclass_of_base_connection(self):
-    """the package's NodeManager should be a subclass of core's BaseConnection
-    """
-    assert issubclass(openbts.NodeManager, openbts.core.BaseConnection)
-
-
-class OpenBTSTest(unittest.TestCase):
-  """Testing the openbts.OpenBTS class.
-  """
-  def setUp(self):
-    self.openbts_connection = openbts.OpenBTS()
-
-  def test_openbts_class_is_subclass_of_base_connection(self):
-    """the package's OpenBTS should be a subclass of core's BaseConnection
-    """
-    assert issubclass(openbts.OpenBTS, openbts.core.BaseConnection)
+  def test_read_config_gets_response(self):
+    """Reading a key should use the zmq socket and return a Response."""
+    response = self.openbts_connection.read_config('sample-key')
+    self.assertTrue(self.openbts_connection.socket.recv.called)
+    self.assertEqual(response.code, 204)
