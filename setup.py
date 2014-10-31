@@ -13,11 +13,12 @@ with open('readme.md') as f:
 
 setup(
     name='openbts',
-    version='0.0.1',
+    version='0.0.2',
     description='OpenBTS NodeManager client',
     long_description=readme,
     url='http://github.com/yosemitebandit/openbts-python',
-    download_url = 'https://github.com/yosemitebandit/openbts-python/tarball/0.0.1',
+    download_url='https://github.com/yosemitebandit/openbts-python/tarball/'
+                 '0.0.2',
     author='Matt Ball',
     author_email='matt.ball.2@gmail.com',
     license='MIT',
