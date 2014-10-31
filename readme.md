@@ -1,5 +1,6 @@
 a Python client for the OpenBTS NodeManager,
-providing access to OpenBTS, SMQueue, SIPAuthServe and NodeManager itself
+providing access to components in the OpenBTS application suite: SMQueue,
+SIPAuthServe, OpenBTS and NodeManager itself
 
 
 ### installation
