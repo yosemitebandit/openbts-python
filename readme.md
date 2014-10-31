@@ -16,23 +16,14 @@ these examples come from chapter 10 of the
 ```python
 # read a config value from a running OpenBTS instance
 import openbts
-openbts_connection = openbts.OpenBTS()
+openbts_connection = openbts.components.OpenBTS()
 response = openbts_connection.read_config('GSM.Radio.Band')
-print response.value
+print response.data['value']
 # 900
 
-# set an SMQueue parameter
-import openbts
-smqueue_connection = openbts.SMQueue()
-response = smqueue_connection.update_config('SIP.myIP2', '192.168.0.22')
-print response.status
-# ok
-
-# create a new subscriber
-import openbts
-sipauthserve_connection = openbts.SIPAuthServe()
-response = sipauthserve_connection.create_subscriber(name='matt', imsi='899', ki='+Z3m')
-print response.status_code
+# update a config value in a running OpenBTS instance
+response = openbts_connection.update_config('GSM.Identity.MCC', 672)
+print response.code
 # 204
 ```
 
