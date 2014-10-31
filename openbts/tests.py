@@ -6,7 +6,7 @@ import json
 import mock
 import unittest
 
-from openbts.openbts_component import OpenBTS
+from openbts.components import OpenBTS
 
 
 class OpenBTSNominalConfigTestCase(unittest.TestCase):

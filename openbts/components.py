@@ -1,5 +1,5 @@
-"""openbts.openbts_component
-manages a connection to the OpenBTS component
+"""openbts.components
+manages components in the OpenBTS application suite
 """
 
 from openbts.core import BaseComponent

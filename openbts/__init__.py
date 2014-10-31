@@ -1,8 +1,9 @@
 """openbts
 python client to the OpenBTS NodeManager
 
-NodeManager itself provides an API to other components: SMQueue, SIPAuthServe,
-OpenBTS and NodeManager itself.
+NodeManager provides an API to other components in the OpenBTS application
+suite, such as the SMQueue service, SIPAuthServe, OpenBTS and NodeManager
+itself.
 """
-from .node_manager_component import NodeManager
-from .openbts_component import OpenBTS
+
+from .components import OpenBTS
