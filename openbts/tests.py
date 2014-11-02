@@ -3,11 +3,55 @@ tests for the package's primary modules
 """
 
 import json
-import mock
+from multiprocessing import Process
+import time
 import unittest
 
+import mock
+import zmq
+
 from openbts.components import OpenBTS
-from openbts.exceptions import InvalidRequestError
+from openbts.core import BaseComponent
+from openbts.exceptions import InvalidRequestError, TimeoutError
+
+
+class BaseComponentTestCase(unittest.TestCase):
+  """Testing the core.BaseComponent class.
+
+  Contains a simple zmq server with a fixed response delay time that can be
+  used to test socket timeout.  The idea is to run the demo server in another
+  process.
+  """
+  # demo server will wait this many seconds before replying
+  RESPONSE_DELAY = 0.2
+  DEMO_ADDRESS = 'tcp://127.0.0.1:7890'
+
+  def zmq_demo_server(self):
+    """Run a small zmq testing server."""
+    context = zmq.Context()
+    server_socket = context.socket(zmq.REP)
+    server_socket.bind(self.DEMO_ADDRESS)
+    server_socket.recv()
+    response = json.dumps({'code': 200, 'data': 'testing', 'dirty': 0})
+    time.sleep(self.RESPONSE_DELAY)
+    server_socket.send(response)
+
+  def setUp(self):
+    """Setup the zmq test server."""
+    self.demo_server_process = Process(target=self.zmq_demo_server)
+    self.demo_server_process.start()
+
+  def tearDown(self):
+    """Shutdown the demo zmq server."""
+    self.demo_server_process.terminate()
+    self.demo_server_process.join()
+
+  def test_socket_timeout(self):
+    """Base socket should raise a TimeoutError after receiving no reply."""
+    component = BaseComponent(socket_timeout=self.RESPONSE_DELAY*0.9)
+    component.socket.connect(self.DEMO_ADDRESS)
+    with self.assertRaises(TimeoutError):
+      component.read_config('sample-key')
 
 
 class OpenBTSNominalConfigTestCase(unittest.TestCase):
@@ -15,7 +59,6 @@ class OpenBTSNominalConfigTestCase(unittest.TestCase):
 
   Applying nominal uses of the 'config' command and 'openbts' target.
   """
-
   def setUp(self):
     self.openbts_connection = OpenBTS()
     # mock a zmq socket with a simple recv return value
@@ -71,7 +114,6 @@ class OpenBTSOffNominalConfigTestCase(unittest.TestCase):
 
   Examining off-nominal behaviors of the 'config' command and 'openbts' target.
   """
-
   def setUp(self):
     self.openbts_connection = OpenBTS()
     # mock a zmq socket with a simple recv return value

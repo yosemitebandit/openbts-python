@@ -13,3 +13,7 @@ class InvalidRequestError(OpenBTSError):
 class InvalidResponseError(OpenBTSError):
   """Invalid zmq response."""
   pass
+
+class TimeoutError(OpenBTSError):
+  """Zmq socket timeout."""
+  pass

@@ -6,20 +6,24 @@ import json
 
 import zmq
 
-from openbts.exceptions import InvalidRequestError, InvalidResponseError
+from openbts.exceptions import (InvalidRequestError, InvalidResponseError,
+                                TimeoutError)
 
 class BaseComponent(object):
   """Manages a zeromq connection.
 
   The intent is to create other components that inherit from this base class.
 
+  Kwargs:
+    socket_timeout: time in seconds to wait on self.socket.recv before raising
+        a TimeoutError
   """
-  def __init__(self):
+  def __init__(self, **kwargs):
     context = zmq.Context()
     # the component inheriting from BaseComponent should call connect on this
     # socket with the appropriate address
     self.socket = context.socket(zmq.REQ)
-    # TODO(matt): implement zmq timeout
+    self.socket_timeout = kwargs.pop('socket_timeout', 10)
 
   def read_config(self, key):
     """Reads a config value.
@@ -57,19 +61,29 @@ class BaseComponent(object):
     return self._send_and_receive(message)
 
   def _send_and_receive(self, message):
-    """sending payloads to NM and returning Response instances.
+    """Sending payloads to NM and returning Response instances.
 
-    Or, if the action failed, instantiating a response will raise an error.
+    Or, if the action failed, an error will be raised during the instantiation
+    of the Response.  Can also timeout if the socket receives no data for some
+    period.
 
     Args:
       message: dict of a message to send to NM
 
     Returns:
       Response instance if the request succeeded
+
+    Raises:
+      TimeoutError: if nothing is received for the timeout
     """
+    # send the message and poll for responses
     self.socket.send(json.dumps(message))
-    raw_response_data = self.socket.recv()
-    return Response(raw_response_data)
+    responses = self.socket.poll(timeout=self.socket_timeout * 1000)
+    if responses:
+      raw_response_data = self.socket.recv()
+      return Response(raw_response_data)
+    else:
+      raise TimeoutError('did not receive a response')
 
 
 class Response(object):
