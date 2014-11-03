@@ -89,6 +89,27 @@ class BaseComponent(object):
     response = self._send_and_receive(message)
     return response
 
+  def delete_config(self, key):
+    """Deletes a config value.
+
+    Args:
+      key: the config parameter to delete
+
+    Returns:
+      Response instance
+
+    Raises:
+      InvalidRequestError if the key does not exist
+    """
+    message = {
+      'command': 'config',
+      'action': 'delete',
+      'key': key,
+      'value': ''
+    }
+    response = self._send_and_receive(message)
+    return response
+
   def _send_and_receive(self, message):
     """Sending payloads to NM and returning Response instances.
 
@@ -159,6 +180,8 @@ class Response(object):
         raise InvalidRequestError('invalid value')
       elif data['code'] == 409:
         raise InvalidRequestError('conflicting value')
+      elif data['code'] == 500:
+        raise InvalidRequestError('storing new value failed')
 
     # unknown response code
     else:

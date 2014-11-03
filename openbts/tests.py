@@ -145,3 +145,11 @@ class OpenBTSOffNominalConfigTestCase(unittest.TestCase):
     })
     with self.assertRaises(InvalidRequestError):
       self.openbts_connection.create_config('sample-key', 'sample-value')
+
+  def test_update_config_storing_value_fails(self):
+    """If storing the new value fails, an error should be raised."""
+    self.openbts_connection.socket.recv.return_value = json.dumps({
+      'code': 500,
+    })
+    with self.assertRaises(InvalidRequestError):
+      self.openbts_connection.update_config('sample-key', 'sample-value')
