@@ -47,10 +47,17 @@ MIT
 
 
 ### testing
-test with `nose`:
+run unit tests with `nose`:
 
 ```shell
-$ nosetests --detailed-errors openbts/tests.py
+$ nosetests --detailed-errors
+```
+
+Running the integration test requires a live OpenBTS instance.
+And the test will modify values in the OpenBTS system, so run it with caution:
+
+```shell
+$ python integration_test.py
 ```
 
 
