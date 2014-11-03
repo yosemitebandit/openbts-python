@@ -18,12 +18,12 @@ from openbts.exceptions import InvalidRequestError, TimeoutError
 class BaseComponentTestCase(unittest.TestCase):
   """Testing the core.BaseComponent class.
 
-  Contains a simple zmq server with a fixed response delay time that can be
-  used to test socket timeout.  The idea is to run the demo server in another
-  process.
+  Contains a simple zmq server with a fixed latency.  The simulated latency
+  allows us to test socket timeout features.  The idea is to run the demo
+  server in another process and then connect through a test client.
   """
   # demo server will wait this many seconds before replying
-  RESPONSE_DELAY = 0.2
+  RESPONSE_DELAY = 0.1
   DEMO_ADDRESS = 'tcp://127.0.0.1:7890'
 
   def zmq_demo_server(self):
@@ -33,6 +33,7 @@ class BaseComponentTestCase(unittest.TestCase):
     server_socket.bind(self.DEMO_ADDRESS)
     server_socket.recv()
     response = json.dumps({'code': 200, 'data': 'testing', 'dirty': 0})
+    # delay a bit before sending the reply
     time.sleep(self.RESPONSE_DELAY)
     server_socket.send(response)
 
@@ -48,6 +49,8 @@ class BaseComponentTestCase(unittest.TestCase):
 
   def test_socket_timeout(self):
     """Base socket should raise a TimeoutError after receiving no reply."""
+    # server will delay before sending response
+    # so we set the timeout to be a bit less than that amount
     component = BaseComponent(socket_timeout=self.RESPONSE_DELAY*0.9)
     component.socket.connect(self.DEMO_ADDRESS)
     with self.assertRaises(TimeoutError):
