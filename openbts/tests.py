@@ -72,7 +72,7 @@ class OpenBTSNominalConfigTestCase(unittest.TestCase):
       'dirty': 0
     })
 
-  def test_create_config_returns_501(self):
+  def test_create_config_raises_error(self):
     """Creating a config key should is not yet supported via NodeManager."""
     with self.assertRaises(InvalidRequestError):
       self.openbts_connection.create_config('sample-key', 'sample-value')
@@ -112,20 +112,10 @@ class OpenBTSNominalConfigTestCase(unittest.TestCase):
     self.assertTrue(self.openbts_connection.socket.recv.called)
     self.assertEqual(response.code, 204)
 
-  def test_delete_config_sends_message_and_receives_response(self):
-    """Deleting a key should send a message over zmq and get a response."""
-    response = self.openbts_connection.delete_config('sample-key')
-    self.assertTrue(self.openbts_connection.socket.send.called)
-    expected_message = json.dumps({
-      'command': 'config',
-      'action': 'delete',
-      'key': 'sample-key',
-      'value': ''
-    })
-    self.assertEqual(self.openbts_connection.socket.send.call_args[0],
-                     (expected_message,))
-    self.assertTrue(self.openbts_connection.socket.recv.called)
-    self.assertEqual(response.code, 204)
+  def test_delete_config_raises_error(self):
+    """Deleting a config key should is not yet supported via NodeManager."""
+    with self.assertRaises(InvalidRequestError):
+      self.openbts_connection.delete_config('sample-key')
 
   def test_responses_with_no_dirty_param_parsed_successfully(self):
     """We should handle responses that don't have the 'dirty' attribute."""

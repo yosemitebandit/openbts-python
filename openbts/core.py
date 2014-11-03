@@ -86,23 +86,17 @@ class BaseComponent(object):
   def delete_config(self, key):
     """Deletes a config value.
 
+    This functionality is not yet available via Node Manager.  The method will
+    be left for completeness but will always raise an InvalidRequestError.
+
     Args:
       key: the config parameter to delete
 
-    Returns:
-      Response instance
-
-    Raises:
-      InvalidRequestError if the key does not exist
+    Always raises:
+      InvalidRequestError as this functionality is not yet available via the
+          Node Manager
     """
-    message = {
-      'command': 'config',
-      'action': 'delete',
-      'key': key,
-      'value': ''
-    }
-    response = self._send_and_receive(message)
-    return response
+    raise InvalidRequestError('delete config not implemented')
 
   def _send_and_receive(self, message):
     """Sending payloads to NM and returning Response instances.
