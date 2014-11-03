@@ -55,6 +55,9 @@ class BaseComponent(object):
 
     Returns:
       Response instance
+
+    Raises:
+      InvalidRequestError if the key does not exist
     """
     message = {
       'command': 'config',
@@ -73,6 +76,9 @@ class BaseComponent(object):
 
     Returns:
       Response instance
+
+    Raises:
+      InvalidRequestError if the key does not exist
     """
     message = {
       'command': 'config',
