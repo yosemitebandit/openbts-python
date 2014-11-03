@@ -155,7 +155,7 @@ class Response(object):
         on restart of the component
   """
 
-  success_codes = [200, 204]
+  success_codes = [200, 304, 204]
   error_codes = [404, 406, 409, 500]
 
   def __init__(self, raw_response_data):
