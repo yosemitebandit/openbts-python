@@ -169,7 +169,7 @@ class Response(object):
     # if request was successful, create a response object
     if data['code'] in self.success_codes:
       self.code = data['code']
-      self.data = data['data']
+      self.data = data.get('data', None)
       self.dirty = data.get('dirty', None)
 
     # if request failed for some reason, continue

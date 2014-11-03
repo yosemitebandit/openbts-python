@@ -147,6 +147,14 @@ class OpenBTSNominalConfigTestCase(unittest.TestCase):
     response = self.openbts_connection.read_config('sample-key')
     self.assertEqual(response.code, 200)
 
+  def test_responses_with_no_data_param_parsed_successfully(self):
+    """We should handle responses that don't have the 'data' attribute."""
+    self.openbts_connection.socket.recv.return_value = json.dumps({
+      'code': 200,
+    })
+    response = self.openbts_connection.read_config('sample-key')
+    self.assertEqual(response.code, 200)
+
 
 class OpenBTSOffNominalConfigTestCase(unittest.TestCase):
   """Testing the openbts_component.OpenBTS class.
