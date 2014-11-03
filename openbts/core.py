@@ -82,7 +82,7 @@ class BaseComponent(object):
     """
     message = {
       'command': 'config',
-      'action': 'read',
+      'action': 'update',
       'key': key,
       'value': value
     }

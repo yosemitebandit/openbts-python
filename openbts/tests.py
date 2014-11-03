@@ -98,7 +98,7 @@ class OpenBTSNominalConfigTestCase(unittest.TestCase):
     self.assertTrue(self.openbts_connection.socket.send.called)
     expected_message = json.dumps({
       'command': 'config',
-      'action': 'read',
+      'action': 'update',
       'key': 'sample-key',
       'value': 'sample-value'
     })
