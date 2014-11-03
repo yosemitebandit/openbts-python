@@ -170,7 +170,7 @@ class Response(object):
     if data['code'] in self.success_codes:
       self.code = data['code']
       self.data = data['data']
-      self.dirty = bool(data['dirty'])
+      self.dirty = data.get('dirty', None)
 
     # if request failed for some reason, continue
     elif data['code'] in self.error_codes:
