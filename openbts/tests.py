@@ -137,3 +137,11 @@ class OpenBTSOffNominalConfigTestCase(unittest.TestCase):
     })
     with self.assertRaises(InvalidRequestError):
       self.openbts_connection.update_config('sample-key', 'sample-value')
+
+  def test_create_config_conflicting_value(self):
+    """Creating a config key that already exists raises an error."""
+    self.openbts_connection.socket.recv.return_value = json.dumps({
+      'code': 409,
+    })
+    with self.assertRaises(InvalidRequestError):
+      self.openbts_connection.create_config('sample-key', 'sample-value')

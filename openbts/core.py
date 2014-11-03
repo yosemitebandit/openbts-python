@@ -25,6 +25,28 @@ class BaseComponent(object):
     self.socket = context.socket(zmq.REQ)
     self.socket_timeout = kwargs.pop('socket_timeout', 10)
 
+  def create_config(self, key, value):
+    """Create a config parameter and initialize it.
+
+    Args:
+      key: the config parameter to create
+      value: the initial value of the new parameter
+
+    Returns:
+      Response instance
+
+    Raises:
+      InvalidRequestError if the key already exists
+    """
+    message = {
+      'command': 'config',
+      'action': 'create',
+      'key': key,
+      'value': value
+    }
+    response = self._send_and_receive(message)
+    return response
+
   def read_config(self, key):
     """Reads a config value.
 
@@ -58,7 +80,8 @@ class BaseComponent(object):
       'key': key,
       'value': value
     }
-    return self._send_and_receive(message)
+    response = self._send_and_receive(message)
+    return response
 
   def _send_and_receive(self, message):
     """Sending payloads to NM and returning Response instances.
@@ -121,13 +144,15 @@ class Response(object):
       self.code = data['code']
       self.data = data['data']
       self.dirty = bool(data['dirty'])
-    # if request failed for some reason, continue
 
+    # if request failed for some reason, continue
     elif data['code'] in self.error_codes:
       if data['code'] == 404:
         raise InvalidRequestError('unknown key')
-      if data['code'] == 406:
+      elif data['code'] == 406:
         raise InvalidRequestError('invalid value')
+      elif data['code'] == 409:
+        raise InvalidRequestError('conflicting value')
 
     # unknown response code
     else:
