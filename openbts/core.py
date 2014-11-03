@@ -28,24 +28,18 @@ class BaseComponent(object):
   def create_config(self, key, value):
     """Create a config parameter and initialize it.
 
+    This functionality is not yet available via Node Manager.  The method will
+    be left for completeness but will always raise an InvalidRequestError.
+
     Args:
       key: the config parameter to create
       value: the initial value of the new parameter
 
-    Returns:
-      Response instance
-
-    Raises:
-      InvalidRequestError if the key already exists
+    Always raises:
+      InvalidRequestError as this functionality is not yet available via the
+          Node Manager
     """
-    message = {
-      'command': 'config',
-      'action': 'create',
-      'key': key,
-      'value': value
-    }
-    response = self._send_and_receive(message)
-    return response
+    raise InvalidRequestError('create config not implemented')
 
   def read_config(self, key):
     """Reads a config value.
@@ -179,6 +173,8 @@ class Response(object):
       elif data['code'] == 406:
         raise InvalidRequestError('invalid value')
       elif data['code'] == 409:
+        # TODO(matt): if creating config values isn't possible, will we ever
+        #             see the 409 code?
         raise InvalidRequestError('conflicting value')
       elif data['code'] == 500:
         raise InvalidRequestError('storing new value failed')

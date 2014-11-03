@@ -72,6 +72,11 @@ class OpenBTSNominalConfigTestCase(unittest.TestCase):
       'dirty': 0
     })
 
+  def test_create_config_returns_501(self):
+    """Creating a config key should is not yet supported via NodeManager."""
+    with self.assertRaises(InvalidRequestError):
+      self.openbts_connection.create_config('sample-key', 'sample-value')
+
   def test_read_config_sends_message_and_receives_response(self):
     """Reading a key should send a message over zmq and get a response."""
     response = self.openbts_connection.read_config('sample-key')
@@ -99,22 +104,6 @@ class OpenBTSNominalConfigTestCase(unittest.TestCase):
     expected_message = json.dumps({
       'command': 'config',
       'action': 'update',
-      'key': 'sample-key',
-      'value': 'sample-value'
-    })
-    self.assertEqual(self.openbts_connection.socket.send.call_args[0],
-                     (expected_message,))
-    self.assertTrue(self.openbts_connection.socket.recv.called)
-    self.assertEqual(response.code, 204)
-
-  def test_create_config_sends_message_and_receives_response(self):
-    """Creating a key should send a message over zmq and get a response."""
-    response = self.openbts_connection.create_config('sample-key',
-                                                     'sample-value')
-    self.assertTrue(self.openbts_connection.socket.send.called)
-    expected_message = json.dumps({
-      'command': 'config',
-      'action': 'create',
       'key': 'sample-key',
       'value': 'sample-value'
     })
@@ -181,14 +170,6 @@ class OpenBTSOffNominalConfigTestCase(unittest.TestCase):
     })
     with self.assertRaises(InvalidRequestError):
       self.openbts_connection.update_config('sample-key', 'sample-value')
-
-  def test_create_config_conflicting_value(self):
-    """Creating a config key that already exists raises an error."""
-    self.openbts_connection.socket.recv.return_value = json.dumps({
-      'code': 409,
-    })
-    with self.assertRaises(InvalidRequestError):
-      self.openbts_connection.create_config('sample-key', 'sample-value')
 
   def test_update_config_storing_value_fails(self):
     """If storing the new value fails, an error should be raised."""
