@@ -111,6 +111,45 @@ class OpenBTSNominalConfigTestCase(unittest.TestCase):
     self.assertTrue(self.openbts_connection.socket.recv.called)
     self.assertEqual(response.code, 204)
 
+  def test_create_config_sends_message(self):
+    """Creating a key should send a JSON-formatted message over zmq."""
+    self.openbts_connection.create_config('sample-key', 'sample-value')
+    self.assertTrue(self.openbts_connection.socket.send.called)
+    expected_message = json.dumps({
+      'command': 'config',
+      'action': 'create',
+      'key': 'sample-key',
+      'value': 'sample-value'
+    })
+    self.assertEqual(self.openbts_connection.socket.send.call_args[0],
+                     (expected_message,))
+
+  def test_create_config_gets_response(self):
+    """Creating a key should use the zmq socket and return a Response."""
+    response = self.openbts_connection.create_config('sample-key',
+                                                     'sample-value')
+    self.assertTrue(self.openbts_connection.socket.recv.called)
+    self.assertEqual(response.code, 204)
+
+  def test_delete_config_sends_message(self):
+    """Deleting a key should send a JSON-formatted message over zmq."""
+    self.openbts_connection.delete_config('sample-key')
+    self.assertTrue(self.openbts_connection.socket.send.called)
+    expected_message = json.dumps({
+      'command': 'config',
+      'action': 'delete',
+      'key': 'sample-key',
+      'value': ''
+    })
+    self.assertEqual(self.openbts_connection.socket.send.call_args[0],
+                     (expected_message,))
+
+  def test_delete_config_gets_response(self):
+    """Deleting a key should use the zmq socket and return a Response."""
+    response = self.openbts_connection.delete_config('sample-key')
+    self.assertTrue(self.openbts_connection.socket.recv.called)
+    self.assertEqual(response.code, 204)
+
 
 class OpenBTSOffNominalConfigTestCase(unittest.TestCase):
   """Testing the openbts_component.OpenBTS class.
