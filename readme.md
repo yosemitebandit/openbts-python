@@ -53,8 +53,10 @@ run unit tests with `nose`:
 $ nosetests --detailed-errors
 ```
 
-Running the integration test requires a live OpenBTS instance.
-And the test will modify values in the OpenBTS system, so run it with caution:
+Running the integration tests require a live OpenBTS instance
+running on the same machine.
+The test will modify real system parameters, so run it with caution,
+or better yet, against a system not in prod.
 
 ```shell
 $ python integration_test.py
