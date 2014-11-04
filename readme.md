@@ -45,7 +45,7 @@ print len(response.data)
 
 # create a new subscriber by name, IMSI, MSIDSN and optional ki
 subscriber = ('ada', 0123, 4567, 8901)
-response = sipauthserve_connection.create_subscriber(subscriber)
+response = sipauthserve_connection.create_subscriber(*subscriber)
 print response.code
 # 200
 ```
