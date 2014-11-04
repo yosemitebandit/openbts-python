@@ -37,6 +37,17 @@ openbts_connection = openbts.components.OpenBTS()
 response = openbts_connection.monitor()
 print response.data['noiseRSSI']
 # -67
+
+# view all subscriber data
+response = sipauthserve_connection.get_subscribers()
+print len(response.data)
+# 78
+
+# create a new subscriber by name, IMSI, MSIDSN and optional ki
+subscriber = ('ada', 0123, 4567, 8901)
+response = sipauthserve_connection.create_subscriber(subscriber)
+print response.code
+# 200
 ```
 
 see additional examples in `integration_test.py`
@@ -93,7 +104,7 @@ username: yosemitebandit
 password: mhm
 ```
 
-bump the versions in `setup.py` and in this file, then run:
+bump the versions in `setup.py` and in the readme, then run:
 
 ```shell
 $ git tag 0.0.1 -m 'openbts-python v0.0.1'
