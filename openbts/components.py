@@ -23,7 +23,8 @@ class SIPAuthServe(BaseComponent):
     """Add a subscriber.
 
     If the 'ki' argument is given, OpenBTS will use full auth.  Otherwise the
-    system will use cache auth.
+    system will use cache auth.  The values of IMSI, MSISDN and ki will all
+    be cast to strings before the message is sent.
 
     Args:
       name: name of the subscriber
