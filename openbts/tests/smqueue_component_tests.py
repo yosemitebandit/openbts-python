@@ -32,7 +32,7 @@ class SMQueueNominalConfigTestCase(unittest.TestCase):
     with self.assertRaises(InvalidRequestError):
       self.smqueue_connection.create_config('sample-key', 'sample-value')
 
-  def test_read_config_sends_message_and_receives_response(self):
+  def test_read_config(self):
     """Reading a key should send a message over zmq and get a response."""
     response = self.smqueue_connection.read_config('sample-key')
     # check that we touched the socket to send the message
@@ -51,7 +51,7 @@ class SMQueueNominalConfigTestCase(unittest.TestCase):
     # verify we received a valid response
     self.assertEqual(response.code, 204)
 
-  def test_update_config_sends_message_and_receives_response(self):
+  def test_update_config(self):
     """Updating a key should send a message over zmq and get a response."""
     response = self.smqueue_connection.update_config('sample-key',
                                                      'sample-value')

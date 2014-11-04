@@ -32,7 +32,7 @@ class OpenBTSNominalConfigTestCase(unittest.TestCase):
     with self.assertRaises(InvalidRequestError):
       self.openbts_connection.create_config('sample-key', 'sample-value')
 
-  def test_read_config_sends_message_and_receives_response(self):
+  def test_read_config(self):
     """Reading a key should send a message over zmq and get a response."""
     response = self.openbts_connection.read_config('sample-key')
     # check that we touched the socket to send the message
@@ -51,7 +51,7 @@ class OpenBTSNominalConfigTestCase(unittest.TestCase):
     # verify we received a valid response
     self.assertEqual(response.code, 204)
 
-  def test_update_config_sends_message_and_receives_response(self):
+  def test_update_config(self):
     """Updating a key should send a message over zmq and get a response."""
     response = self.openbts_connection.update_config('sample-key',
                                                      'sample-value')
@@ -72,7 +72,7 @@ class OpenBTSNominalConfigTestCase(unittest.TestCase):
     with self.assertRaises(InvalidRequestError):
       self.openbts_connection.delete_config('sample-key')
 
-  def test_responses_with_no_dirty_param_parsed_successfully(self):
+  def test_responses_with_no_dirty_param(self):
     """We should handle responses that don't have the 'dirty' attribute."""
     self.openbts_connection.socket.recv.return_value = json.dumps({
       'code': 200,
@@ -81,7 +81,7 @@ class OpenBTSNominalConfigTestCase(unittest.TestCase):
     response = self.openbts_connection.read_config('sample-key')
     self.assertEqual(response.code, 200)
 
-  def test_responses_with_no_data_param_parsed_successfully(self):
+  def test_responses_with_no_data_param(self):
     """We should handle responses that don't have the 'data' attribute."""
     self.openbts_connection.socket.recv.return_value = json.dumps({
       'code': 200,

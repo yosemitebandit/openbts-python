@@ -32,7 +32,7 @@ class SIPAuthServeNominalConfigTestCase(unittest.TestCase):
     with self.assertRaises(InvalidRequestError):
       self.sipauthserve_connection.create_config('sample-key', 'sample-value')
 
-  def test_read_config_sends_message_and_receives_response(self):
+  def test_read_config(self):
     """Reading a key should send a message over zmq and get a response."""
     response = self.sipauthserve_connection.read_config('sample-key')
     # check that we touched the socket to send the message
@@ -51,7 +51,7 @@ class SIPAuthServeNominalConfigTestCase(unittest.TestCase):
     # verify we received a valid response
     self.assertEqual(response.code, 204)
 
-  def test_update_config_sends_message_and_receives_response(self):
+  def test_update_config(self):
     """Updating a key should send a message over zmq and get a response."""
     response = self.sipauthserve_connection.update_config('sample-key',
                                                      'sample-value')
@@ -175,7 +175,7 @@ class SIPAuthServeNominalSubscriberTestCase(unittest.TestCase):
     self.assertTrue(self.sipauthserve_connection.socket.recv.called)
     self.assertEqual(response.code, 200)
 
-  def test_create_subscriber_with_ki_sends_message_and_receives_response(self):
+  def test_create_subscriber_with_ki(self):
     """Creating a subscriber with a specficied ki should send a message over
     zmq and get a response.
     """
@@ -197,7 +197,7 @@ class SIPAuthServeNominalSubscriberTestCase(unittest.TestCase):
     self.assertTrue(self.sipauthserve_connection.socket.recv.called)
     self.assertEqual(response.code, 204)
 
-  def test_create_subscriber_sans_ki_sends_message_and_receives_response(self):
+  def test_create_subscriber_sans_ki(self):
     """Creating a subscriber without a specficied ki should still send a
     message over zmq and get a response.
     """
