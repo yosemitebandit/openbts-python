@@ -69,9 +69,10 @@ all inherit from this single class.  But it seems better to individually
 inspect the functionality of each class in `openbts.components`. Anyway,
 onward..
 
-Running the integration tests requires one to have a live OpenBTS instance
-running on the same machine.  The test will modify real system parameters,
-so run it with caution, or better yet, run it against a system not in prod.
+To run the integration tests, you will need an OpenBTS instance running on the
+same machine as the testing script.  The test will modify real system
+parameters, so run it with caution, or better yet, run it against a system not
+in production.
 
 ```shell
 $ python integration_test.py
