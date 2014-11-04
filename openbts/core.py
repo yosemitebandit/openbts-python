@@ -98,6 +98,21 @@ class BaseComponent(object):
     """
     raise InvalidRequestError('delete config not implemented')
 
+  def get_version(self):
+    """Query the version of a component.
+
+    Returns:
+      Response instance
+    """
+    message = {
+      'command': 'version',
+      'action': '',
+      'key': '',
+      'value': ''
+    }
+    response = self._send_and_receive(message)
+    return response
+
   def _send_and_receive(self, message):
     """Sending payloads to NM and returning Response instances.
 

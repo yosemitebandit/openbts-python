@@ -122,3 +122,30 @@ class OpenBTSOffNominalConfigTestCase(unittest.TestCase):
     })
     with self.assertRaises(InvalidRequestError):
       self.openbts_connection.update_config('sample-key', 'sample-value')
+
+
+class OpenBTSNominalGetVersionTestCase(unittest.TestCase):
+  """Testing the 'get_version' command on the components.OpenBTS class."""
+  def setUp(self):
+    self.openbts_connection = OpenBTS()
+    # mock a zmq socket with a simple recv return value
+    self.openbts_connection.socket = mock.Mock()
+    self.openbts_connection.socket.recv.return_value = json.dumps({
+      'code': 200,
+      'data': 'release 4.0.0.8025'
+    })
+
+  def test_get_version(self):
+    """The 'get_version' command should return a response."""
+    response = self.openbts_connection.get_version()
+    self.assertTrue(self.openbts_connection.socket.send.called)
+    expected_message = json.dumps({
+      'command': 'version',
+      'action': '',
+      'key': '',
+      'value': ''
+    })
+    self.assertEqual(self.openbts_connection.socket.send.call_args[0],
+                     (expected_message,))
+    self.assertTrue(self.openbts_connection.socket.recv.called)
+    self.assertEqual(response.data, 'release 4.0.0.8025')
