@@ -79,7 +79,7 @@ class BaseComponent(object):
       'command': 'config',
       'action': 'update',
       'key': key,
-      'value': value
+      'value': str(value)
     }
     response = self._send_and_receive(message)
     return response
