@@ -17,6 +17,17 @@ if __name__ == '__main__':
   print ''
 
 
+  """ testing version querying
+  """
+  components = (OpenBTS, SIPAuthServe, SMQueue)
+  print 'getting component versions:'
+  for component in components:
+    connection = component()
+    response = connection.get_version()
+    print '  %s: %s' % (connection, response.data)
+  print ''
+
+
   """ testing nominal config reads and updates
   """
   component_tests = [
@@ -25,7 +36,7 @@ if __name__ == '__main__':
     (SMQueue, 'Bounce.Code', 555)
   ]
   for entry in component_tests:
-    print 'testing the %s:' % entry[0]()
+    print 'testing the %s config operations:' % entry[0]()
     connection = entry[0]()
     response = connection.read_config(entry[1])
     original_value = response.data['value']
@@ -52,7 +63,7 @@ if __name__ == '__main__':
   """
   connection = SIPAuthServe()
   response = connection.get_subscribers()
-  print 'testing subscriber operations:'
+  print 'testing SIPAuthServe subscriber operations:'
   print '  we currently have %s subscribers' % len(response.data)
   print 'creating two subscribers:'
   subscriber_a = ('jon', 0123, 4567)
