@@ -18,18 +18,28 @@ $ pip install openbts
 ### usage
 
 ```python
-# read a config value from a running OpenBTS instance
 import openbts
-openbts_connection = openbts.components.OpenBTS()
-response = openbts_connection.read_config('GSM.Radio.Band')
-print response.data['value']
-# 900
 
-# update a config value
-response = openbts_connection.update_config('GSM.Identity.MCC', 672)
+# read a config value from SMQueue
+smqueue_connection = openbts.components.SMQueue()
+response = smqueue_connection.read_config('Bounce.Code')
+print response.data['value']
+# 101
+
+# update an SIPAuthServe config value
+sipauthserve_connection = openbts.components.SIPAuthServe()
+response = sipauthserve_connection.update_config('Log.Alarms.Max', 12)
 print response.code
 # 204
+
+# get realtime OpenBTS monitoring data
+openbts_connection = openbts.components.OpenBTS()
+response = openbts_connection.monitor()
+print response.data['noiseRSSI']
+# -67
 ```
+
+see additional examples in `integration_test.py`
 
 
 ### license
