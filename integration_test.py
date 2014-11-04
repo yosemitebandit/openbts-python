@@ -16,6 +16,7 @@ if __name__ == '__main__':
     sys.exit(1)
   print ''
 
+
   """ testing nominal config reads and updates
   """
   component_tests = [
@@ -37,6 +38,7 @@ if __name__ == '__main__':
     print '  reverted %s to %s' % (entry[1], response.data['value'])
     print ''
 
+
   """ testing nominal OpenBTS monitoring
   """
   print 'getting OpenBTS monitoring data:'
@@ -44,6 +46,27 @@ if __name__ == '__main__':
   response = connection.monitor()
   print '  noise RSSI: %s' % response.data['noiseRSSI']
   print ''
+
+
+  """ testing nominal SIPAuthServe subscriber operations
+  """
+  connection = SIPAuthServe()
+  response = connection.get_subscribers()
+  print 'testing subscriber operations:'
+  print '  we currently have %s subscribers' % len(response.data)
+  print 'creating two subscribers:'
+  subscriber_a = ('jon', 0123, 4567)
+  subscriber_b = ('ada', 8901, 2345, 6789)
+  connection.create_subscriber(*subscriber_a)
+  connection.create_subscriber(*subscriber_b)
+  response = connection.get_subscribers()
+  print '  we now have %s subscribers' % len(response.data)
+  print 'deleting those two subscribers:'
+  connection.delete_subscriber(imsi=subscriber_a[1])
+  connection.delete_subscriber(imsi=subscriber_b[1])
+  response = connection.get_subscribers()
+  print "  and we're back to %s subscribers" % len(response.data)
+
 
   print '\nintegration test complete.'
   print ''
