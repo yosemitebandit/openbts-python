@@ -72,7 +72,7 @@ MIT
 run unit tests with `nose`:
 
 ```shell
-$ nosetests
+$ nosetests --with-coverage --cover-package=openbts
 ```
 
 We have quite a few similar unit tests between components.
