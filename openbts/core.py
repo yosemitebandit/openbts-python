@@ -144,40 +144,37 @@ class Response(object):
   """Provides access to the response data.
 
   Raises an exception if the request was not successful (e.g. key not found).
-
   Note that we are explicitly ignoring NodeManager error code 501 (unknown
   action).  We are tightly controlling the specified action, so we do not
   expect to encounter this error.
 
   Args:
-    raw_response_data: json-encoded text
+    raw_response_data: json-encoded text received by zmq
 
   Attributes:
-    code: the response code
+    code: the response code (matches HTTP response code spec)
     data: text or dict of response data
     dirty: boolean that, if True, indicates that the command will take effect
-        on restart of the component
+        only when the component is restarted
   """
 
   success_codes = [200, 304, 204]
   error_codes = [404, 406, 409, 500]
 
   def __init__(self, raw_response_data):
-    """Init the response with raw data from the socket."""
     data = json.loads(raw_response_data)
-
     if 'code' not in data.keys():
       raise InvalidResponseError('key "code" not in raw response: "%s"' %
                                  raw_response_data)
-
-    # if request was successful, create a response object
+    # if the request was successful, create a response object and exit
     if data['code'] in self.success_codes:
       self.code = data['code']
       self.data = data.get('data', None)
       self.dirty = data.get('dirty', None)
+      return
 
-    # if request failed for some reason, continue
-    elif data['code'] in self.error_codes:
+    # if the request failed for some reason, raise an error
+    if data['code'] in self.error_codes:
       if data['code'] == 404:
         raise InvalidRequestError('unknown key')
       elif data['code'] == 406:
@@ -188,7 +185,6 @@ class Response(object):
         raise InvalidRequestError('conflicting value')
       elif data['code'] == 500:
         raise InvalidRequestError('storing new value failed')
-
-    # unknown response code
+    # handle unknown response codes
     else:
       raise InvalidResponseError('code "%s" not known' % data['code'])
