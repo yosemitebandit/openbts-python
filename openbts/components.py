@@ -6,7 +6,11 @@ from openbts.core import BaseComponent
 
 class OpenBTS(BaseComponent):
   """Manages communication to an OpenBTS instance.
+
+  Args:
+    address: tcp socket for the zmq connection
   """
+
   def __init__(self, address='tcp://127.0.0.1:45060'):
     super(OpenBTS, self).__init__()
     self.socket.connect(address)
@@ -14,7 +18,11 @@ class OpenBTS(BaseComponent):
 
 class SIPAuthServe(BaseComponent):
   """Manages communication to the SIPAuthServe service.
+
+  Args:
+    address: tcp socket for the zmq connection
   """
+
   def __init__(self, address='tcp://127.0.0.1:45064'):
     super(SIPAuthServe, self).__init__()
     self.socket.connect(address)
