@@ -223,69 +223,16 @@ class SIPAuthServeNominalSubscriberTestCase(unittest.TestCase):
     """Deleting a subscriber by passing an IMSI should send a message over zmq
     and get a response.
     """
-    response = self.sipauthserve_connection.delete_subscriber(
-        imsi=310150123456789)
+    response = self.sipauthserve_connection.delete_subscriber(310150123456789)
     self.assertTrue(self.sipauthserve_connection.socket.send.called)
     expected_message = json.dumps({
       'command': 'subscribers',
       'action': 'delete',
       'match': {
-        'imsi': str(310150123456789)
+        'imsi': '310150123456789'
       }
     })
     self.assertEqual(self.sipauthserve_connection.socket.send.call_args[0],
                      (expected_message,))
     self.assertTrue(self.sipauthserve_connection.socket.recv.called)
     self.assertEqual(response.code, 204)
-
-  def test_delete_subscriber_by_msisdn(self):
-    """Deleting a subscriber by passing an MSISDN should send a message over
-    zmq and get a response.
-    """
-    response = self.sipauthserve_connection.delete_subscriber(
-        msisdn=123456789)
-    self.assertTrue(self.sipauthserve_connection.socket.send.called)
-    expected_message = json.dumps({
-      'command': 'subscribers',
-      'action': 'delete',
-      'match': {
-        'msisdn': str(123456789)
-      }
-    })
-    self.assertEqual(self.sipauthserve_connection.socket.send.call_args[0],
-                     (expected_message,))
-    self.assertTrue(self.sipauthserve_connection.socket.recv.called)
-    self.assertEqual(response.code, 204)
-
-
-class SIPAuthServeOffNominalSubscriberTestCase(unittest.TestCase):
-  """Testing the components.SIPAuthServe class.
-
-  Applying off nominal uses of the 'subscribers' command and the 'sipauthserve'
-  target.
-  """
-
-  def setUp(self):
-    self.sipauthserve_connection = SIPAuthServe()
-    # mock a zmq socket with a simple recv return value
-    self.sipauthserve_connection.socket = mock.Mock()
-    self.sipauthserve_connection.socket.recv.return_value = json.dumps({
-      'code': 204,
-      'data': 'sample',
-      'dirty': 0
-    })
-
-  def test_delete_subscriber_with_both_msisdn_and_imsi(self):
-    """Trying to delete a subscriber by passing an MSISDN and an IMSI should
-    raise a SyntaxError -- only one param should be used.
-    """
-    with self.assertRaises(SyntaxError):
-      self.sipauthserve_connection.delete_subscriber(msisdn=123456789,
-          imsi=310150123456789)
-
-  def test_delete_subscriber_with_neither_msisdn_and_imsi(self):
-    """Trying to delete a subscriber without passing an MSISDN or an IMSI
-    should raise a SyntaxError.
-    """
-    with self.assertRaises(SyntaxError):
-      self.sipauthserve_connection.delete_subscriber()

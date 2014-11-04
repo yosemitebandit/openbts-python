@@ -93,36 +93,21 @@ class SIPAuthServe(BaseComponent):
     response = self._send_and_receive(message)
     return response
 
-  def delete_subscriber(self, imsi=None, msisdn=None):
-    """Delete a subscriber by IMSI or MSISDN.
-
-    You should pass only the IMSI or the MSISDN (not both) or a SyntaxError
-    will be raised.  If neither the IMSI or the MSISDN is passed, a syntax
-    error is also raised.
+  def delete_subscriber(self, imsi):
+    """Delete a subscriber by IMSI.
 
     Args:
-      IMSI: find the subscriber to delete by IMSI
-      MSISDN: find the subscriber to delete by MSISDN
+      imsi: the IMSI of the to-be-deleted subscriber
 
     Returns:
       Response instance
-
-    Raises:
-      Syntax error if neither IMSI or MSISDN are specified, or if both are
-          specified simultaneously
     """
-    if imsi and msisdn:
-      raise SyntaxError
-    if imsi:
-      match_value = {'imsi': str(imsi)}
-    elif msisdn:
-      match_value = {'msisdn': str(msisdn)}
-    else:
-      raise SyntaxError
     message = {
       'command': 'subscribers',
       'action': 'delete',
-      'match': match_value
+      'match': {
+        'imsi': str(imsi)
+      }
     }
     response = self._send_and_receive(message)
     return response
