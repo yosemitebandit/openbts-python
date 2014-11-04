@@ -60,7 +60,7 @@ MIT
 run unit tests with `nose`:
 
 ```shell
-$ nosetests --detailed-errors
+$ nosetests
 ```
 
 We have quite a few similar unit tests between components.
