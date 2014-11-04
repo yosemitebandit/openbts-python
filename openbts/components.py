@@ -44,3 +44,26 @@ class SIPAuthServe(BaseComponent):
     }
     response = self._send_and_receive(message)
     return response
+
+  def delete_subscriber(self, imsi=None, msisdn=None):
+    """Delete a subscriber by IMSI or MSISDN.
+
+    You should pass only the IMSI or the MSISDN (not both) or a SyntaxError
+    will be raised.  If neither the IMSI or the MSISDN is passed, a syntax
+    error is also raised.
+
+    Args:
+      IMSI: find the subscriber to delete by IMSI
+      MSISDN: find the subscriber to delete by MSISDN
+    """
+    if imsi:
+      match_value = {'imsi': str(imsi)}
+    elif msisdn:
+      match_value = {'msisdn': str(msisdn)}
+    message = {
+      'command': 'subscribers',
+      'action': 'delete',
+      'match': match_value
+    }
+    response = self._send_and_receive(message)
+    return response
