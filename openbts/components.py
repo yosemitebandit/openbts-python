@@ -15,6 +15,9 @@ class OpenBTS(BaseComponent):
     super(OpenBTS, self).__init__()
     self.socket.connect(address)
 
+  def __repr__(self):
+    return 'OpenBTS component'
+
 
 class SIPAuthServe(BaseComponent):
   """Manages communication to the SIPAuthServe service.
@@ -26,6 +29,9 @@ class SIPAuthServe(BaseComponent):
   def __init__(self, address='tcp://127.0.0.1:45064'):
     super(SIPAuthServe, self).__init__()
     self.socket.connect(address)
+
+  def __repr__(self):
+    return 'SIPAuthServe component'
 
   def create_subscriber(self, name, imsi, msisdn, ki=''):
     """Add a subscriber.
@@ -95,3 +101,6 @@ class SMQueue(BaseComponent):
   def __init__(self, address='tcp://127.0.0.1:45063'):
     super(SMQueue, self).__init__()
     self.socket.connect(address)
+
+  def __repr__(self):
+    return 'SMQueue component'
