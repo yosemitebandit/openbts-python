@@ -61,7 +61,7 @@ onward..
 
 Running the integration tests requires one to have a live OpenBTS instance
 running on the same machine.  The test will modify real system parameters,
-so run it with caution, or better yet, against a system not in prod.
+so run it with caution, or better yet, run it against a system not in prod.
 
 ```shell
 $ python integration_test.py
