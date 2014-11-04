@@ -12,7 +12,7 @@ from openbts.exceptions import InvalidRequestError
 
 
 class OpenBTSNominalConfigTestCase(unittest.TestCase):
-  """Testing the openbts_component.OpenBTS class.
+  """Testing the components.OpenBTS class.
 
   Applying nominal uses of the 'config' command and 'openbts' target.
   """
@@ -90,13 +90,13 @@ class OpenBTSNominalConfigTestCase(unittest.TestCase):
 
 
 class OpenBTSOffNominalConfigTestCase(unittest.TestCase):
-  """Testing the openbts_component.OpenBTS class.
+  """Testing the components.OpenBTS class.
 
   Examining off-nominal behaviors of the 'config' command and 'openbts' target.
   """
   def setUp(self):
     self.openbts_connection = OpenBTS()
-    # mock a zmq socket with a simple recv return value
+    # mock a zmq socket
     self.openbts_connection.socket = mock.Mock()
 
   def test_read_config_unknown_key(self):
