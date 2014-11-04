@@ -15,6 +15,7 @@ class SIPAuthServeNominalSubscriberTestCase(unittest.TestCase):
 
   Applying nominal uses of the 'subscribers' command and 'sipauthserve' target.
   """
+
   def setUp(self):
     self.sipauthserve_connection = SIPAuthServe()
     # mock a zmq socket with a simple recv return value
@@ -114,6 +115,7 @@ class SIPAuthServeOffNominalSubscriberTestCase(unittest.TestCase):
   Applying off nominal uses of the 'subscribers' command and the 'sipauthserve'
   target.
   """
+
   def setUp(self):
     self.sipauthserve_connection = SIPAuthServe()
     # mock a zmq socket with a simple recv return value

@@ -18,6 +18,7 @@ class BaseComponent(object):
     socket_timeout: time in seconds to wait on self.socket.recv before raising
         a TimeoutError
   """
+
   def __init__(self, **kwargs):
     context = zmq.Context()
     # the component inheriting from BaseComponent should call connect on this

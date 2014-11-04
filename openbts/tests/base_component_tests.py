@@ -20,6 +20,7 @@ class BaseComponentTestCase(unittest.TestCase):
   allows us to test socket timeout features.  The idea is to run the demo
   server in another process and then connect through a test client.
   """
+
   # demo server will wait this many seconds before replying
   RESPONSE_DELAY = 0.1
   DEMO_ADDRESS = 'tcp://127.0.0.1:7890'

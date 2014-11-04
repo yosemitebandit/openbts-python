@@ -16,6 +16,7 @@ class OpenBTSNominalConfigTestCase(unittest.TestCase):
 
   Applying nominal uses of the 'config' command and 'openbts' target.
   """
+
   def setUp(self):
     self.openbts_connection = OpenBTS()
     # mock a zmq socket with a simple recv return value
@@ -94,6 +95,7 @@ class OpenBTSOffNominalConfigTestCase(unittest.TestCase):
 
   Examining off-nominal behaviors of the 'config' command and 'openbts' target.
   """
+
   def setUp(self):
     self.openbts_connection = OpenBTS()
     # mock a zmq socket
@@ -126,6 +128,7 @@ class OpenBTSOffNominalConfigTestCase(unittest.TestCase):
 
 class OpenBTSNominalGetVersionTestCase(unittest.TestCase):
   """Testing the 'get_version' command on the components.OpenBTS class."""
+
   def setUp(self):
     self.openbts_connection = OpenBTS()
     # mock a zmq socket with a simple recv return value
