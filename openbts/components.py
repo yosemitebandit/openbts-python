@@ -18,6 +18,22 @@ class OpenBTS(BaseComponent):
   def __repr__(self):
     return 'OpenBTS component'
 
+  def monitor(self):
+    """Monitor channel loads, queue sizes and noise levels.
+
+    See 3.4.4 of the OpenBTS 4.0 Manual for more info.
+
+    Returns:
+      Response instance
+    """
+    message = {
+      'command': 'monitor',
+      'action': '',
+      'key': '',
+      'value': ''
+    }
+    return self._send_and_receive(message)
+
 
 class SIPAuthServe(BaseComponent):
   """Manages communication to the SIPAuthServe service.

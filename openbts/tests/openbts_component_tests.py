@@ -152,3 +152,33 @@ class OpenBTSNominalGetVersionTestCase(unittest.TestCase):
                      (expected_message,))
     self.assertTrue(self.openbts_connection.socket.recv.called)
     self.assertEqual(response.data, 'release 4.0.0.8025')
+
+
+class OpenBTSNominalMonitorTestCase(unittest.TestCase):
+  """Testing the 'monitor' command on the components.OpenBTS class."""
+
+  def setUp(self):
+    self.openbts_connection = OpenBTS()
+    # mock a zmq socket with a simple recv return value
+    self.openbts_connection.socket = mock.Mock()
+    self.openbts_connection.socket.recv.return_value = json.dumps({
+      'code': 200,
+      'data': {
+        'noiseRSSI': -68
+      }
+    })
+
+  def test_monitor(self):
+    """The 'monitor' command should return a response."""
+    response = self.openbts_connection.monitor()
+    self.assertTrue(self.openbts_connection.socket.send.called)
+    expected_message = json.dumps({
+      'command': 'monitor',
+      'action': '',
+      'key': '',
+      'value': ''
+    })
+    self.assertEqual(self.openbts_connection.socket.send.call_args[0],
+                     (expected_message,))
+    self.assertTrue(self.openbts_connection.socket.recv.called)
+    self.assertEqual(response.data['noiseRSSI'], -68)

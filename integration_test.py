@@ -37,4 +37,12 @@ if __name__ == '__main__':
     print '  reverted %s to %s' % (entry[1], response.data['value'])
     print ''
 
+  """ testing nominal OpenBTS monitoring
+  """
+  print 'getting OpenBTS monitoring data:'
+  connection = OpenBTS()
+  response = connection.monitor()
+  print '  noise RSSI: %s' % response.data['noiseRSSI']
+  print ''
+
   print '\nintegration test complete.'
