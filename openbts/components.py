@@ -83,3 +83,15 @@ class SIPAuthServe(BaseComponent):
     }
     response = self._send_and_receive(message)
     return response
+
+
+class SMQueue(BaseComponent):
+  """Manages communication to the SMQueue service.
+
+  Args:
+    address: tcp socket for the zmq connection
+  """
+
+  def __init__(self, address='tcp://127.0.0.1:45063'):
+    super(SMQueue, self).__init__()
+    self.socket.connect(address)
