@@ -55,11 +55,19 @@ class SIPAuthServe(BaseComponent):
     Args:
       IMSI: find the subscriber to delete by IMSI
       MSISDN: find the subscriber to delete by MSISDN
+
+    Raises:
+      Syntax error if neither IMSI or MSISDN are specified, or if both are
+          specified simultaneously
     """
+    if imsi and msisdn:
+      raise SyntaxError
     if imsi:
       match_value = {'imsi': str(imsi)}
     elif msisdn:
       match_value = {'msisdn': str(msisdn)}
+    else:
+      raise SyntaxError
     message = {
       'command': 'subscribers',
       'action': 'delete',
