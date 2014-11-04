@@ -3,6 +3,11 @@ providing access to components in the OpenBTS application suite:
 SMQueue, SIPAuthServe, and OpenBTS itself.
 
 
+### requirements
+* OpenBTS 5.0 public alpha (tested on `11465a2`)
+* Python 2.7
+
+
 ### installation
 
 ```shell
@@ -27,16 +32,6 @@ print response.code
 ```
 
 
-### requirements
-* OpenBTS 5.0 public alpha (tested on `11465a2`)
-* Python 2.7
-
-
-### resources
-* see the [OpenBTS 4.0 manual](http://openbts.org/site/wp-content/uploads/2014/07/OpenBTS-4.0-Manual.pdf)
-* and the [NodeManager source](https://github.com/RangeNetworks/NodeManager) from Range
-
-
 ### license
 MIT
 
@@ -44,6 +39,11 @@ MIT
 ### releases
 * 0.0.2 - config reading and updating for the OpenBTS component
 * 0.0.1 - barebones setup for pypi
+
+
+### resources
+* see the [OpenBTS 4.0 manual](http://openbts.org/site/wp-content/uploads/2014/07/OpenBTS-4.0-Manual.pdf)
+* and the [NodeManager source](https://github.com/RangeNetworks/NodeManager) from Range
 
 
 ### testing
