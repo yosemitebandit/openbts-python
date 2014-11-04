@@ -4,30 +4,37 @@ import sys
 
 import zmq
 
-from openbts.components import OpenBTS
-from openbts.exceptions import InvalidRequestError
+from openbts.components import OpenBTS, SMQueue, SIPAuthServe
 
 if __name__ == '__main__':
+  print ''
   print 'note: this script must be run against a live OpenBTS instance'
   print 'warning: during the test, this script will modify live config values'
   value = raw_input('\ncontinue? (y/n) ')
   if value.lower() != 'y':
+    print 'exiting'
     sys.exit(1)
+  print ''
 
-  print 'testing the OpenBTS component'
-  openbts_connection = OpenBTS()
-
-  """ read - update - read
+  """ testing nominal config reads and updates
   """
-  path = 'Control.NumSQLTries'
-  # TODO(matt): do we always send strings?
-  update_value = '3'
-  print 'reading "%s"' % path
-  response = openbts_connection.read_config(path)
-  print '  value: %s' % response.data['value']
-  print 'updating "%s" to "%s"' % (path, update_value)
-  response = openbts_connection.update_config(path, update_value)
-  print '  response code: %s' % response.code
-  print 'reading "%s"' % path
-  response = openbts_connection.read_config(path)
-  print '  value: %s' % response.data['value']
+  component_tests = [
+    (OpenBTS, 'Control.NumSQLTries', '6'),
+    (SIPAuthServe, 'Log.Alarms.Max', '12'),
+    (SMQueue, 'Bounce.Code', 555)
+  ]
+  for entry in component_tests:
+    print 'testing the %s:' % entry[0]()
+    connection = entry[0]()
+    response = connection.read_config(entry[1])
+    original_value = response.data['value']
+    print '  original value of %s: %s' % (entry[1], original_value)
+    connection.update_config(entry[1], entry[2])
+    response = connection.read_config(entry[1])
+    print '  set %s to %s' % (entry[1], entry[2])
+    connection.update_config(entry[1], original_value)
+    response = connection.read_config(entry[1])
+    print '  reverted %s to %s' % (entry[1], response.data['value'])
+    print ''
+
+  print '\nintegration test complete.'
