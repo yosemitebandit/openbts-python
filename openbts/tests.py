@@ -10,7 +10,7 @@ import unittest
 import mock
 import zmq
 
-from openbts.components import OpenBTS
+from openbts.components import OpenBTS, SIPAuthServe
 from openbts.core import BaseComponent
 from openbts.exceptions import InvalidRequestError, TimeoutError
 
@@ -168,3 +168,63 @@ class OpenBTSOffNominalConfigTestCase(unittest.TestCase):
     })
     with self.assertRaises(InvalidRequestError):
       self.openbts_connection.update_config('sample-key', 'sample-value')
+
+
+class SIPAuthServeNominalSubscriberTestCase(unittest.TestCase):
+  """Testing the openbts_component.SIPAuthServe class.
+
+  Applying nominal uses of the 'subscribers' command and 'sipauthserve' target.
+  """
+  def setUp(self):
+    self.sipauthserve_connection = SIPAuthServe()
+    # mock a zmq socket with a simple recv return value
+    self.sipauthserve_connection.socket = mock.Mock()
+    self.sipauthserve_connection.socket.recv.return_value = json.dumps({
+      'code': 204,
+      'data': 'sample',
+      'dirty': 0
+    })
+
+  def test_create_subscriber_with_ki_sends_message_and_receives_response(self):
+    """Creating a subscriber with a specficied ki should send a message over
+    zmq and get a response.
+    """
+    response = self.sipauthserve_connection.create_subscriber('sample-name',
+        310150123456789, 123456789, 'abc')
+    self.assertTrue(self.sipauthserve_connection.socket.send.called)
+    expected_message = json.dumps({
+      'command': 'subscribers',
+      'action': 'create',
+      'fields': {
+        'name': 'sample-name',
+        'imsi': '310150123456789',
+        'msisdn': '123456789',
+        'ki': 'abc'
+      }
+    })
+    self.assertEqual(self.sipauthserve_connection.socket.send.call_args[0],
+                     (expected_message,))
+    self.assertTrue(self.sipauthserve_connection.socket.recv.called)
+    self.assertEqual(response.code, 204)
+
+  def test_create_subscriber_sans_ki_sends_message_and_receives_response(self):
+    """Creating a subscriber without a specficied ki should still send a
+    message over zmq and get a response.
+    """
+    response = self.sipauthserve_connection.create_subscriber('sample-name',
+        310150123456789, 123456789)
+    self.assertTrue(self.sipauthserve_connection.socket.send.called)
+    expected_message = json.dumps({
+      'command': 'subscribers',
+      'action': 'create',
+      'fields': {
+        'name': 'sample-name',
+        'imsi': '310150123456789',
+        'msisdn': '123456789',
+        'ki': ''
+      }
+    })
+    self.assertEqual(self.sipauthserve_connection.socket.send.call_args[0],
+                     (expected_message,))
+    self.assertTrue(self.sipauthserve_connection.socket.recv.called)
+    self.assertEqual(response.code, 204)
