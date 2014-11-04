@@ -154,6 +154,27 @@ class SIPAuthServeNominalSubscriberTestCase(unittest.TestCase):
       'dirty': 0
     })
 
+  def test_get_subscribers(self):
+    """Requesting all subscribers should send a message over zmq and get a
+    response.
+    """
+    self.sipauthserve_connection.socket.recv.return_value = json.dumps({
+      'code': 200,
+      'data': ['subscriber_a', 'subscriber_b']
+    })
+    response = self.sipauthserve_connection.get_subscribers()
+    self.assertTrue(self.sipauthserve_connection.socket.send.called)
+    expected_message = json.dumps({
+      'command': 'subscribers',
+      'action': 'read',
+      'key': '',
+      'value': ''
+    })
+    self.assertEqual(self.sipauthserve_connection.socket.send.call_args[0],
+                     (expected_message,))
+    self.assertTrue(self.sipauthserve_connection.socket.recv.called)
+    self.assertEqual(response.code, 200)
+
   def test_create_subscriber_with_ki_sends_message_and_receives_response(self):
     """Creating a subscriber with a specficied ki should send a message over
     zmq and get a response.

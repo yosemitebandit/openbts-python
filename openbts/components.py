@@ -49,6 +49,21 @@ class SIPAuthServe(BaseComponent):
   def __repr__(self):
     return 'SIPAuthServe component'
 
+  def get_subscribers(self):
+    """Gets all subscribers.
+
+    Returns:
+      Response instance
+    """
+    message = {
+      'command': 'subscribers',
+      'action': 'read',
+      'key': '',
+      'value': ''
+    }
+    response = self._send_and_receive(message)
+    return response
+
   def create_subscriber(self, name, imsi, msisdn, ki=''):
     """Add a subscriber.
 
