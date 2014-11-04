@@ -61,6 +61,9 @@ class SIPAuthServe(BaseComponent):
       imsi: IMSI of the subscriber
       msisdn: MSISDN of the subscriber
       ki: authentication key of the subscriber
+
+    Returns:
+      Response instance
     """
     message = {
       'command': 'subscribers',
@@ -85,6 +88,9 @@ class SIPAuthServe(BaseComponent):
     Args:
       IMSI: find the subscriber to delete by IMSI
       MSISDN: find the subscriber to delete by MSISDN
+
+    Returns:
+      Response instance
 
     Raises:
       Syntax error if neither IMSI or MSISDN are specified, or if both are
