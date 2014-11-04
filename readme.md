@@ -53,10 +53,15 @@ run unit tests with `nose`:
 $ nosetests --detailed-errors
 ```
 
-Running the integration tests require a live OpenBTS instance
-running on the same machine.
-The test will modify real system parameters, so run it with caution,
-or better yet, against a system not in prod.
+We have quite a few similar unit tests between components.
+Many could be written against `openbts.core.BaseComponent`, as the components
+all inherit from this single class.  But it seems better to individually
+inspect the functionality of each class in `openbts.components`. Anyway,
+onward..
+
+Running the integration tests requires one to have a live OpenBTS instance
+running on the same machine.  The test will modify real system parameters,
+so run it with caution, or better yet, against a system not in prod.
 
 ```shell
 $ python integration_test.py
